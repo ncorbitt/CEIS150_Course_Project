@@ -10,89 +10,25 @@ from stock_class import Stock, DailyData
 #from account_class import  Traditional, Robo
 import matplotlib.pyplot as plt
 import csv
-import os
 
 
 def add_stock(stock_list):
-    option = ''
-    while not option:
-        print('\nAdd Stock ---')
-        symbol = input("Enter Ticket Symbol: ").upper()
-        name = input("Enter Company Name: ")
-        shares = float(input("Enter Number of Shares: "))
-        new_stock = Stock(symbol, name, shares)
-        stock_list.append(new_stock)
-        option = input("Enter another stock or '0' to stop: ")
+    print("This method is under construction")
 
 
 # Remove stock and all daily data
 def delete_stock(stock_list):
-    print("\nDelete Stock ---")
-    print(f'Stock List: { [stock.symbol for stock in stock_list] } ')
-    symbol = input("Enter Ticket Symbol: ").upper()
-
-    found = False
-    i = 0
-
-    for stock in stock_list:
-        if stock.symbol == symbol:
-            found = True
-            stock_list.pop(i)
-
-        i += 1
-
-    if found == True:
-        print(f'\n*** Stock {symbol} removed')
-        print(f'\nStock List: { [stock.symbol for stock in stock_list] } \n')
-
-    else:
-        print(f'Stock {symbol} not found')
+    print("This method is under construction")
 
 
 # List stocks being tracked
 def list_stocks(stock_list):
-
-    while True:
-        print("\nStock List ---")
-        print(f'{"Symbol":<10}{"Name":<20}{"Shares":>10}\n')
-        for stock in stock_list:
-            print(f'{stock.symbol:<10}{stock.name:<20}{stock.shares:>10}')
-
-        input('\nPress Enter to Continue ***')
-        break
+    print("This method is under construction")
 
 
     # Add Daily Stock Data
 def add_stock_data(stock_list):
-
-    print("\nAdd Daily Stock Data ----")
-    print("Stock List: [", end="")
-    for stock in stock_list:
-        print(stock.symbol, " ", end="")
-    print("]")
-    symbol = input("Which stock do you want to use?: ").upper()
-    found = False
-    for stock in stock_list:
-        if stock.symbol == symbol:
-            found = True
-            current_stock = stock
-    if found == True:
-        print("Ready to add data for: ", symbol)
-        print("Enter Data Separated by Commas - Do Not use Spaces")
-        print("Enter a Blank Line to Quit")
-        print("Enter Date,Price,Volume")
-        print("Example: 8/28/20,47.85,10550")
-        data = input("Enter Date,Price,Volume: ")
-        while data != "":
-            date, price, volume = data.split(",")
-            daily_data = DailyData(date, float(price), float(volume))
-
-            current_stock.add_data(daily_data)
-            data = input("Enter Date,Price,Volume: ")
-            print("Date Entry Complete")
-        else:
-            print("Symbol Not Found ***")
-            _ = input("Press Enter to Continue ***")
+    print("This method is under construction")
 
 
 def investment_type(stock_list):
@@ -116,43 +52,7 @@ def import_stock_csv(stock_list):
 
 # Display Report
 def display_report(stock_list):
-    os.system('clear')
-    print("\nStock Report --- ")
-    for stock in stock_list:
-        print(f'Report for: {stock.symbol} {stock.name}')
-        print(f'Shares: {stock.shares}')
-        count = 0
-        price_total = 0
-        volumn_total = 0
-        lowPrice = 999999.99
-        highPrise = 0
-        lowVolumn = 999999999999
-        highVolumn = 0
-        startDate = datetime.strftime("12/31/2099", "%m/%d/%Y")
-        endDate = datetime.strptime("1/1/1900", "%m/%d/%Y")
-        for daily_data in stock.DataList:
-            count += 1
-            price_total += daily_data.close
-            volumn_total += daily_data.volume
-            if daily_data.close < lowPrice:
-                lowPrice = daily_data.close
-            if daily_data.close > highPrise:
-                highPrise = daily_data.close
-            if daily_data.volume < lowVolumn:
-                lowVolumn = daily_data.volume
-            if daily_data.volume > highVolumn:
-                highVolumn = daily_data.volume
-            if daily_data.date < startDate:
-                startDate = daily_data.date
-                startPrice = daily_data.close
-            if daily_data.date > endDate:
-                endDate = daily_data.date
-                endPrice = daily_data.close
-        else:
-            print("No daily history")
-            print('\n\n\n')
-            print('Report Complete\n')
-            input('Press Enter to Continue ***')
+    print("This method is under construction")
 
 
 def main_menu(stock_list):
