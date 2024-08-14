@@ -6,13 +6,13 @@ Created on Mon Aug 30 22:57:11 2021
 from datetime import datetime
 import csv
 import json
+import numpy
 import matplotlib.pyplot as plt
 
 from stock_class import Stock, DailyData
 from account_class import Traditional, Robo
 
 #from account_class import  Traditional, Robo
-import matplotlib.pyplot as plt
 
 
 def add_stock(stock_list):
@@ -110,24 +110,32 @@ def add_stock_data(stock_list):
     print("]")
     symbol = input("Which stock do you want to use?: ").upper()
     found = False
+
     for stock in stock_list:
         if stock.symbol == symbol:
             found = True
             current_stock = stock
-    if found == True:
+
+    print(f'*** current_stock:\n{current_stock} ')
+
+    if found:
         print("Ready to add data for: ", symbol)
         print("Enter Data Separated by Commas - Do Not use Spaces")
         print("Enter a Blank Line to Quit")
         print("Enter Date,Price,Volume")
         print("Example: 8/28/20,47.85,10550")
-        data = input("Enter Date,Price,Volume: ")
+
+        data = input("\nEnter Date,Price,Volume: ")
+
         while data != "":
             date, price, volume = data.split(",")
+            print()
+            print(date, price, volume)
+            print()
             daily_data = DailyData(date, float(price), float(volume))
-
             current_stock.add_data(daily_data)
             data = input("Enter Date,Price,Volume: ")
-        print("Date Entry Complete")
+        print("\nDate Entry Complete")
     else:
         print("Symbol Not Found ***")
     _ = input("Press Enter to Continue ***")
@@ -172,16 +180,6 @@ def investment_type(stock_list):
         trad_acct.add_stock(temp_list)
 
 
-# Function to create stock chart
-def display_stock_chart(stock_list, symbol):
-    print("This method is under construction")
-
-
-# Display Chart
-def display_chart(stock_list):
-    print("This method is under construction")
-
-
 # Get price and volume history from Yahoo! Finance using CSV import.
 def import_stock_csv(stock_list):
     print("This method is under construction")
@@ -222,10 +220,54 @@ def display_report(stock_list):
                 highVolumn = daily_data.volume
 
 
+def display_stock_chart(stock_list, symbol):
+    date = []
+    price = []
+    volume = []
+    company = ''
+
+    for stock in stock_list:
+        if stock.symbol == symbol:
+            company = stock.name
+            for dailyData in stock.DataList:
+                date.append(dailyData.date)
+                price.append(dailyData.close)
+                volume.append(dailyData.volume)
+
+    print(f'''
+    date = {date}
+    price = {price}
+    volume = {volume}
+    ''')
+
+    plt.plot(date, price)
+    plt.xlabel('Date')
+    plt.ylabel('Price')
+    plt.title(company)
+    plt.show()
+
+
+def display_chart(stock_list):
+    print('\nStock Chart ---')
+    print(f"Stock List: { [stock.symbol for stock in stock_list] }")
+    symbol = input('Pick stock for a chart: ').upper()
+    found = False
+
+    for stock in stock_list:
+        if stock.symbol == symbol:
+            found = True
+            current_stock = stock
+    if found:
+        display_stock_chart(stock_list, current_stock.symbol)
+    else:
+        print(f"Error: {symbol} not found!")
+        _ = input('Press enter to continue ***')
+
+
 def main_menu(stock_list):
     option = ""
     while True:
-        print("Stock Analyzer ---")
+        print("\nStock Analyzer ---")
         print("1 - Add Stock")
         print("2 - Delete Stock")
         print("3 - List Stocks")

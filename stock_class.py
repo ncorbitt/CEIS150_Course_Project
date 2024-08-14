@@ -6,6 +6,7 @@ CEIS150: Week 2 - Date: 07/23/24
 
 
 class Stock:
+
   def __init__(self, symbol, name, shares):
     self.symbol = symbol
     self.name = name
@@ -14,19 +15,44 @@ class Stock:
 
   def add_data(self, stock_data):
     self.DataList.append(stock_data)
+    
+  def __repr__(self):
+    print('__repr__')
+    output = f'''
+    symbol: {self.symbol}
+    name: {self.name}
+    shares: {self.shares}
+    datalist: {self.DataList}
+    '''
+    return output
+
+  def __str__(self):
+    print('__str__')
+    output = f'''
+    symbol: {self.symbol}
+    name: {self.name}
+    shares: {self.shares}
+    datalist: {self.DataList}
+    '''
+    return output
+
+
 
 
 class DailyData:
+
   def __init__(self, date, close, volume):
-    self.date   = date
-    self.close  = close
+    self.date = date
+    self.close = close
     self.volume = volume
+
+  def __str__(self):
+    return f'date: {self.date}, close: {self.close}, volume: {self.volume}'
 
 
 # main() is used for unit testing only. It will run when stock_class.py is run.
 # Run this to test your class code. Once you have eliminated all errors, you are
 # ready to continue with the next part of the project.
-
 
 
 def main():
