@@ -28,7 +28,7 @@ def add_stock(stock_list):
 
 # Remove stock and all daily data
 def delete_stock(stock_list):
-    print('\nDelete stock ---')
+    print('\nDelete Stock ---')
     print(f"Stock List: { [stock.symbol for stock in stock_list] }")
     symbol = input('Which stock do you want to delete?: ').upper()
     found = False
@@ -182,12 +182,39 @@ def investment_type(stock_list):
 
 # Get price and volume history from Yahoo! Finance using CSV import.
 def import_stock_csv(stock_list):
-    print("This method is under construction")
+    list = [stock.symbol for stock in stock_list]
+    print('\nAdd historical data to a stock in the stock list ---')
+    print(f"Stock List: {list}\n")
+    symbol = input('Enter stock symbol: ').upper()
+    filename = input('Enter the fillname: ')
+    print()
 
+    for stock in stock_list:
+        if stock.symbol == symbol:
+            with open(filename, newline='') as stockdata:
+                datareader = csv.reader(stockdata)
+                next(datareader)
+                for row in datareader:
+                    daily_data = DailyData(str(row[0]), float(row[4]), float(row[6]))
+                    # print(f'daily_data: {daily_data}')
+                    stock.add_data(daily_data)
+        display_report(stock_list)
+
+    found = False
+    for stock in stock_list:
+        if stock.symbol == symbol:
+            found = True
+            current_stock = stock
+    if found == True:
+        display_stock_chart(stock_list, current_stock.symbol)
+    else:
+        print("Symbol not found")
+        _ = input("Press enter ro continue")
+    
 
 # Display Report
 def display_report(stock_list):
-    print('Stock Report --- ')
+    print('\nStock Report --- ')
 
     for stock in stock_list:
         print(f'Report for {stock.symbol} {stock.name}')
@@ -197,28 +224,38 @@ def display_report(stock_list):
         volumn_total = 0
         lowPrice = 999999.99
         highPrice = 0.0
-        lowVolumn = 999999999999
-        highVolumn = 0.0
-        startDate = datetime.strptime("12/31/2099", "%m/%d/%Y")
-        endDate = datetime.strptime("1/1/1900", "%m/%d/%Y")
-        for daily_data in stock.daily_data:
+        lowVolume = 999999999999
+        highVolume = 0
+
+        for daily_data in stock.DataList:
+
             count += 1
-            price_total += daily_data.price
+            price_total += daily_data.close
             volumn_total += daily_data.volume
 
-            if daily_data.date < startDate:
-                startDate = daily_data.date
-            if daily_data.date > endDate:
-                endDate = daily_data.date
-            if daily_data.price < lowPrice:
-                lowPrice = daily_data.price
-            if daily_data.price > highPrice:
-                highPrice = daily_data.price
-            if daily_data.volume < lowVolumn:
-                lowVolumn = daily_data.volume
-            if daily_data.volume > highVolumn:
-                highVolumn = daily_data.volume
-
+            if daily_data.close  < lowPrice:   lowPrice   = daily_data.close
+            if daily_data.close  > highPrice:  highPrice  = daily_data.close
+            if daily_data.volume < lowVolume:  lowVolume  = daily_data.volume
+            if daily_data.volume > highVolume: highVolume = daily_data.volume
+            
+            priceChange = highPrice - lowPrice
+            print(daily_data.date, daily_data.close, daily_data.volume)
+        
+        if count > 0:
+            print("\nSummary ---")
+            print(f"Low Price: ${lowPrice:,.2f}")
+            print(f"High Price: ${highPrice:,.2f}")
+            print(f"Average Price: ${price_total/count:,.2f}")
+            print(f"Low Volume: ${lowVolume}")
+            print(f"High Volumn: ${highVolume}")
+            print(f"Average Volumn: ${volumn_total/count}")
+            print(f"Change in price: ${priceChange}")
+            print(f"Profit/Loss: ${priceChange*stock.shares}")
+        else:
+            print('**** No daily history')
+        print('\n\n\n')
+    print('--- report complete ---')
+    _ = input('Press enter to continue')
 
 def display_stock_chart(stock_list, symbol):
     date = []
@@ -267,7 +304,7 @@ def display_chart(stock_list):
 def main_menu(stock_list):
     option = ""
     while True:
-        print("\nStock Analyzer ---")
+        print("\nStock Analyzer ---\n")
         print("1 - Add Stock")
         print("2 - Delete Stock")
         print("3 - List Stocks")
@@ -275,7 +312,7 @@ def main_menu(stock_list):
         print("5 - Show Chart")
         print("6 - Investor Type")
         print("7 - Load Data")
-        print("0 - Exit Program")
+        print("0 - Exit Program\n")
         option = input("Enter Menu Option: ")
         if option == "0":
             print("Goodbye")
@@ -298,6 +335,7 @@ def main_menu(stock_list):
         else:
 
             print("Goodbye")
+
 
 
 # Begin program
